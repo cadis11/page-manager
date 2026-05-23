@@ -1,762 +1,295 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instagram Page Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
-.app{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
-.topbar{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
-.topbar-brand{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
-.topbar-brand i{font-size:18px;color:#D4537E}
-.topbar-spacer{flex:1}
-.conn-badge{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary)}
-.conn-badge.ok{color:#3B6D11;background:#EAF3DE;border-color:#C0DD97}
-.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
-.layout{display:flex;height:600px}
-.sidebar{width:196px;min-width:196px;border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;background:var(--color-background-secondary)}
-.sidebar-section{padding:10px 12px 4px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;color:var(--color-text-secondary);transition:background .12s;margin:1px 4px}
-.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
-.nav-item.active{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
-.nav-item i{font-size:16px}
-.nav-badge{margin-left:auto;font-size:10px;background:#FCEBEB;color:#A32D2D;border-radius:8px;padding:1px 6px;font-weight:500}
-.nav-badge.new{background:#FBEAF0;color:#72243E}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
-.toolbar input,.toolbar select{font-size:12px;padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary)}
-.btn{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:background .12s}
-.btn:hover{background:var(--color-background-secondary)}
+:root{
+  --bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--bg4:#2e2e2e;
+  --text:#f5f5f5;--text2:#a0a0a0;--text3:#606060;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --pink:#e1306c;--pink2:#c13584;--pink-glow:rgba(225,48,108,0.18);
+  --purple:#833ab4;--orange:#fd1d1d;--yellow:#fcb045;
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.12);
+  --red:#ef4444;--red-bg:rgba(239,68,68,0.12);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,0.12);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.12);
+  --r:8px;--rl:14px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+
+/* ── TOP NAV ── */
+.topnav{height:54px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--pink),var(--orange),var(--yellow));display:flex;align-items:center;justify-content:center}
+.brand-icon i{font-size:18px;color:#fff}
+.brand-name{font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--purple),var(--pink),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.topnav-spacer{flex:1}
+.conn-pill{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border2);color:var(--text2);background:var(--bg3)}
+.conn-pill.ok{border-color:rgba(34,197,94,0.4);color:var(--green);background:var(--green-bg)}
+.conn-pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.topnav-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border2);background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;transition:opacity .15s}
+.topnav-btn:hover{opacity:.85}
+
+/* ── LAYOUT ── */
+.shell{display:flex;flex:1;overflow:hidden;height:calc(100vh - 54px)}
+
+/* ── SIDEBAR ── */
+.sidebar{width:210px;min-width:210px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-acct{padding:14px 14px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.acct-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.acct-name{font-size:13px;font-weight:600;line-height:1.3}
+.acct-handle{font-size:11px;color:var(--text3)}
+.sidebar-sec{padding:14px 14px 5px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 12px;margin:1px 6px;border-radius:var(--r);cursor:pointer;color:var(--text2);transition:all .12s;font-size:13px}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--pink-glow);color:var(--pink);font-weight:600}
+.nav-item i{font-size:16px;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--red-bg);color:var(--red);border-radius:10px;padding:2px 7px;font-weight:700}
+.nav-badge.new{background:var(--pink-glow);color:var(--pink)}
+.nav-badge.ok{background:var(--green-bg);color:var(--green)}
+.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+/* ── TOOLBAR ── */
+.tbar{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;flex-wrap:wrap}
+.tbar-title{font-size:14px;font-weight:700;flex:1}
+.tbar input{font-size:12px;padding:7px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:inherit;outline:none}
+.tbar input:focus{border-color:var(--pink)}
+select{font-size:12px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:inherit}
+
+/* ── BUTTONS ── */
+.btn{font-size:12px;padding:7px 14px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-weight:500;transition:all .12s;white-space:nowrap}
+.btn:hover{background:var(--bg4);border-color:var(--border2)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 .btn i{font-size:14px}
-.btn.pink{background:#D4537E;border-color:#D4537E;color:white}
-.btn.pink:hover{background:#993556}
-.btn.green{background:#1D9E75;border-color:#1D9E75;color:white}
-.btn.green:hover{background:#0F6E56}
-.btn.amber{background:#EF9F27;border-color:#EF9F27;color:#412402}
-.btn.amber:hover{background:#BA7517;color:white}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.pane{flex:1;overflow-y:auto}
-.tag{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500}
-.tag-price{background:#FAEEDA;color:#854F0B}.tag-stock{background:#E6F1FB;color:#185FA5}
-.tag-order{background:#EAF3DE;color:#3B6D11}.tag-collab{background:#EEEDFE;color:#3C3489}
-.tag-complaint{background:#FCEBEB;color:#A32D2D}.tag-spam{background:#F1EFE8;color:#5F5E5A}
-.tag-general{background:#FBEAF0;color:#72243E}
-.spinner{width:13px;height:13px;border:2px solid var(--color-border-tertiary);border-top-color:var(--color-text-secondary);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-2px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.log-bar{border-top:0.5px solid var(--color-border-tertiary);padding:5px 16px;background:var(--color-background-secondary);max-height:72px;overflow-y:auto}
-.log-row{font-size:11px;color:var(--color-text-secondary);display:flex;gap:8px;padding:1px 0}
-.log-t{color:var(--color-text-tertiary);flex-shrink:0}
-.log-ok{color:var(--color-text-success)}.log-err{color:var(--color-text-danger)}.log-warn{color:var(--color-text-warning)}
+.btn-grad{background:linear-gradient(135deg,var(--purple),var(--pink));border:none;color:#fff;font-weight:600}
+.btn-grad:hover{opacity:.85;background:linear-gradient(135deg,var(--purple),var(--pink))}
+.btn-green{background:var(--green-bg);border-color:rgba(34,197,94,0.3);color:var(--green)}
+.btn-green:hover{background:rgba(34,197,94,0.2)}
+.btn-red{background:var(--red-bg);border-color:rgba(239,68,68,.3);color:var(--red)}
+.btn-amber{background:var(--amber-bg);border-color:rgba(245,158,11,.3);color:var(--amber)}
 
-.bulk-layout{display:flex;flex:1;overflow:hidden}
-.bulk-left{flex:1;min-width:0;display:flex;flex-direction:column;border-right:0.5px solid var(--color-border-tertiary);overflow:hidden}
-.bulk-right{width:310px;min-width:310px;display:flex;flex-direction:column;overflow:hidden}
+/* ── TAGS ── */
+.tag{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
+.tag-price{background:var(--amber-bg);color:var(--amber)}
+.tag-stock{background:var(--blue-bg);color:var(--blue)}
+.tag-order{background:var(--green-bg);color:var(--green)}
+.tag-collab{background:rgba(139,92,246,.15);color:#a78bfa}
+.tag-complaint{background:var(--red-bg);color:var(--red)}
+.tag-spam{background:rgba(100,100,100,.15);color:var(--text3)}
+.tag-general{background:var(--pink-glow);color:var(--pink)}
 
-.section-hdr{padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px;background:var(--color-background-secondary)}
-.section-hdr span{font-size:12px;font-weight:500;flex:1}
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px}
+.card h3{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--pink);font-size:16px}
+.card p{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px}
 
-.template-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
-.tpl-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px 12px;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
-.tpl-card:hover{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
-.tpl-card.selected{border:2px solid #D4537E;background:#FBEAF0}
-.tpl-emoji{font-size:22px;margin-bottom:5px}
-.tpl-name{font-size:12px;font-weight:500;margin-bottom:2px}
-.tpl-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
-.tpl-badge{position:absolute;top:8px;right:8px;font-size:9px;padding:2px 6px;border-radius:6px;font-weight:500}
-.tpl-badge.new{background:#FBEAF0;color:#72243E}
-.tpl-badge.sale{background:#FAEEDA;color:#854F0B}
+/* ── SETUP WIZARD ── */
+.setup-shell{display:flex;flex:1;overflow:hidden}
+.setup-steps{width:180px;min-width:180px;border-right:1px solid var(--border);padding:16px 8px;display:flex;flex-direction:column;gap:2px;background:var(--bg2)}
+.step-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r);cursor:pointer;transition:background .12s}
+.step-item:hover{background:var(--bg3)}
+.step-item.active{background:var(--bg3)}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s}
+.step-num.done{background:var(--green);color:#fff}
+.step-num.active{background:var(--pink);color:#fff}
+.step-num.idle{background:var(--bg4);color:var(--text3)}
+.step-label{font-size:12px;font-weight:500;color:var(--text2)}
+.step-item.active .step-label{color:var(--text);font-weight:600}
+.setup-content{flex:1;overflow-y:auto;padding:24px 28px}
+.setup-content h2{font-size:18px;font-weight:700;margin-bottom:6px}
+.setup-content .sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.step-instruction{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.step-instruction:last-of-type{border-bottom:none}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:var(--text);line-height:1.6}
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:var(--r);margin-bottom:5px;font-size:12px}
+.perm-name{color:var(--text);font-family:monospace;font-size:11px}
+.copy-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:2px 6px;border-radius:5px;transition:color .12s}
+.copy-btn:hover{color:var(--pink)}
+.tip-box{background:var(--amber-bg);border:1px solid rgba(245,158,11,.2);border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--amber);line-height:1.6;display:flex;gap:8px;margin:14px 0}
+.link-row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.field-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.05em}
+.input-field{width:100%;font-size:13px;padding:9px 12px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
+.input-field:focus{border-color:var(--pink)}
+.input-wrap{position:relative;margin-bottom:12px}
+.input-wrap .eye-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px}
+.conn-result{padding:10px 13px;border-radius:var(--r);font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px;margin-top:10px}
+.conn-result.ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.conn-result.err{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.2)}
 
-.composer-area{padding:12px 16px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto}
-.field-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
-.composer-area input,.composer-area textarea,.composer-area select{width:100%;font-size:12px;padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);font-family:var(--font-sans)}
-.composer-area textarea{resize:vertical;min-height:80px;line-height:1.6}
-.char-count{font-size:11px;color:var(--color-text-tertiary);text-align:right;margin-top:2px}
-.preview-bubble{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:10px 12px;font-size:12px;line-height:1.6;color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);white-space:pre-wrap;min-height:50px}
-.var-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
-.var-pill{font-size:11px;padding:3px 8px;border-radius:8px;background:var(--color-background-info);color:var(--color-text-info);cursor:pointer;border:0.5px solid var(--color-border-info)}
-.var-pill:hover{background:#B5D4F4}
-
-.audience-area{padding:12px 16px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1}
-.audience-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:background .12s}
-.audience-row:hover{background:var(--color-background-secondary)}
-.audience-row.checked{background:#FBEAF0;border-color:#ED93B1}
-.audience-row input[type=checkbox]{accent-color:#D4537E;width:14px;height:14px;flex-shrink:0}
-.audience-info{flex:1;min-width:0}
-.audience-name{font-size:12px;font-weight:500}
-.audience-meta{font-size:11px;color:var(--color-text-secondary)}
-.audience-count{font-size:13px;font-weight:500;color:#D4537E}
-
-.send-panel{border-top:0.5px solid var(--color-border-tertiary);padding:12px 16px;display:flex;flex-direction:column;gap:8px;background:var(--color-background-secondary)}
-.send-summary{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
-.send-summary b{color:var(--color-text-primary)}
-.schedule-row{display:flex;align-items:center;gap:8px}
-.schedule-row input[type=datetime-local]{flex:1;font-size:12px;padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary)}
-.schedule-row label{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:5px;cursor:pointer}
-.schedule-row input[type=checkbox]{accent-color:#D4537E}
-
-.progress-bar-wrap{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;margin:4px 0}
-.progress-bar{height:100%;background:#D4537E;border-radius:3px;transition:width .3s}
-
-.queue-list{padding:8px 16px;display:flex;flex-direction:column;gap:6px}
-.queue-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
-.queue-status{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:500;flex-shrink:0}
-.qs-pending{background:#FAEEDA;color:#854F0B}
-.qs-sent{background:#EAF3DE;color:#3B6D11}
-.qs-failed{background:#FCEBEB;color:#A32D2D}
-.qs-scheduled{background:#E6F1FB;color:#185FA5}
-.queue-body{flex:1;min-width:0}
-.queue-name{font-size:12px;font-weight:500}
-.queue-preview{font-size:11px;color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.queue-time{font-size:11px;color:var(--color-text-tertiary);flex-shrink:0}
-
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--color-text-tertiary);font-size:12px;padding:40px}
-.empty-state i{font-size:30px}
-
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;padding:14px 16px}
-.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
-.stat-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
-.stat-val{font-size:22px;font-weight:500}
-
-.setup-box{padding:14px 16px;overflow-y:auto;flex:1}
-.setup-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:10px}
-.setup-card h3{font-size:13px;font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:7px}
-.setup-card h3 i{font-size:16px;color:#D4537E}
-.setup-card p{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
-.setup-card input{width:100%;font-size:12px;padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);margin-bottom:8px}
-.tone-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.tone-pill{font-size:11px;padding:4px 10px;border-radius:10px;border:0.5px solid var(--color-border-secondary);cursor:pointer;color:var(--color-text-secondary)}
-.tone-pill.active{background:#D4537E;border-color:#D4537E;color:white}
-
-.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
-.msg-item{display:flex;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:background .1s}
-.msg-item:hover{background:var(--color-background-secondary)}
-.msg-item.selected{background:#FBEAF0}
-.msg-item.unread .msg-sender{font-weight:500}
-.unread-dot{width:7px;height:7px;border-radius:50%;background:#D4537E;flex-shrink:0;margin-top:10px}
-.read-spc{width:7px;flex-shrink:0}
+/* ── DMs ── */
+.dm-shell{display:flex;flex:1;overflow:hidden}
+.dm-list{flex:1;overflow-y:auto;min-width:0}
+.msg-item{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.msg-item:hover{background:var(--bg2)}
+.msg-item.active{background:rgba(225,48,108,.06);border-left:2px solid var(--pink)}
+.msg-item.unread .msg-sender{font-weight:700}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);flex-shrink:0;margin-top:13px}
+.read-spc{width:8px;flex-shrink:0}
 .msg-body{flex:1;min-width:0}
-.msg-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
-.msg-sender{font-size:12px}.msg-time{font-size:11px;color:var(--color-text-tertiary)}
-.msg-preview{font-size:12px;color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
-.detail{width:290px;min-width:290px;border-left:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow:hidden}
-.detail-hdr{padding:11px 13px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.thread{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:7px}
-.bubble{max-width:85%;padding:7px 10px;border-radius:var(--border-radius-md);font-size:12px;line-height:1.5}
-.bubble.them{background:var(--color-background-secondary);align-self:flex-start}
-.bubble.us{background:#D4537E;color:white;align-self:flex-end}
-.bubble-time{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
-.reply-area{border-top:0.5px solid var(--color-border-tertiary);padding:10px 12px}
-.reply-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:flex;align-items:center;gap:5px}
-.draft-text{width:100%;font-size:12px;padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);resize:none;line-height:1.5;font-family:var(--font-sans)}
-.reply-actions{display:flex;gap:6px;margin-top:6px}
+.msg-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.msg-sender{font-size:13px}
+.msg-time{font-size:11px;color:var(--text3)}
+.msg-preview{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.msg-tags{display:flex;gap:4px;flex-wrap:wrap}
+
+/* ── DETAIL ── */
+.detail{width:320px;min-width:320px;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
+.detail-hdr{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.thread{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.bubble{max-width:82%;padding:8px 12px;font-size:13px;line-height:1.5;border-radius:16px}
+.bubble.them{background:var(--bg3);align-self:flex-start;border-bottom-left-radius:4px}
+.bubble.us{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.bubble-time{font-size:10px;color:var(--text3);margin-top:3px}
+.reply-area{padding:12px 14px;border-top:1px solid var(--border);background:var(--bg)}
+.reply-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.reply-lbl i{color:var(--pink)}
+.draft-text{width:100%;font-size:12px;padding:8px 11px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);resize:none;line-height:1.5;font-family:inherit;outline:none}
+.draft-text:focus{border-color:var(--pink)}
+
+/* ── BULK ── */
+.bulk-shell{display:flex;flex:1;overflow:hidden}
+.bulk-left{width:55%;min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden}
+.bulk-right{flex:1;display:flex;flex-direction:column;overflow-y:auto;background:var(--bg2)}
+.sec-hdr{padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:8px;background:var(--bg2);flex-shrink:0}
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;overflow-y:auto}
+.tpl-card{border:1px solid var(--border);border-radius:var(--rl);padding:12px;cursor:pointer;transition:all .15s;background:var(--bg2);position:relative}
+.tpl-card:hover{border-color:var(--border2);background:var(--bg3)}
+.tpl-card.sel{border:2px solid var(--pink);background:var(--pink-glow)}
+.tpl-emoji{font-size:24px;margin-bottom:6px}
+.tpl-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.tpl-desc{font-size:11px;color:var(--text2);line-height:1.4}
+.tpl-badge{position:absolute;top:8px;right:8px;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700}
+.tpl-badge.new{background:var(--pink-glow);color:var(--pink)}
+.tpl-badge.sale{background:var(--amber-bg);color:var(--amber)}
+.comp-area{padding:14px 16px;display:flex;flex-direction:column;gap:11px}
+.var-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.var-pill{font-size:11px;padding:3px 9px;border-radius:10px;background:var(--blue-bg);color:var(--blue);cursor:pointer;border:1px solid rgba(59,130,246,.2);font-weight:600}
+.var-pill:hover{background:rgba(59,130,246,.25)}
+.preview-bubble{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:12px;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;min-height:60px}
+.aud-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r);border:1px solid var(--border);cursor:pointer;transition:all .12s;background:var(--bg)}
+.aud-row:hover{background:var(--bg3)}
+.aud-row.chk{background:var(--pink-glow);border-color:rgba(225,48,108,.3)}
+.aud-row input[type=checkbox]{accent-color:var(--pink);width:14px;height:14px;flex-shrink:0}
+.aud-info{flex:1;min-width:0}
+.aud-name{font-size:12px;font-weight:600}
+.aud-meta{font-size:11px;color:var(--text2)}
+.aud-count{font-size:14px;font-weight:700;color:var(--pink)}
+.prog-wrap{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:4px 0}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:3px;transition:width .3s}
+.schedule-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.schedule-row label{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer}
+.schedule-row input[type=checkbox]{accent-color:var(--pink)}
+.schedule-row input[type=datetime-local]{font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:inherit}
+
+/* ── QUEUE ── */
+.q-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg2);margin-bottom:7px}
+.qs{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:700;flex-shrink:0}
+.qs-pending{background:var(--amber-bg);color:var(--amber)}
+.qs-sent{background:var(--green-bg);color:var(--green)}
+.qs-failed{background:var(--red-bg);color:var(--red)}
+.qs-scheduled{background:var(--blue-bg);color:var(--blue)}
+
+/* ── CATALOG ── */
+.cat-item{display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:8px}
+.cat-thumb{width:46px;height:46px;border-radius:var(--r);background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cat-thumb i{font-size:20px;color:var(--text3)}
+.cat-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.cat-price{font-size:12px;color:var(--green);font-weight:600}
+.cat-stock{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:16px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px}
+.stat-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.stat-val{font-size:28px;font-weight:700}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── EMPTY / LOADING ── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text3);font-size:13px;padding:60px 20px;flex:1;text-align:center}
+.empty i{font-size:40px;opacity:.4}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── LOG BAR ── */
+.log-bar{border-top:1px solid var(--border);padding:5px 18px;background:var(--bg2);max-height:70px;overflow-y:auto;flex-shrink:0}
+.log-row{font-size:11px;color:var(--text2);display:flex;gap:8px;padding:1px 0;font-family:monospace}
+.log-t{color:var(--text3);flex-shrink:0}
+.log-ok{color:var(--green)}.log-err{color:var(--red)}.log-warn{color:var(--amber)}
+
+/* ── WELCOME HERO ── */
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;gap:0}
+.hero-icon{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--purple),var(--pink),var(--orange));display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.hero-icon i{font-size:36px;color:#fff}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:10px;background:linear-gradient(135deg,var(--purple),var(--pink),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:14px;color:var(--text2);line-height:1.7;max-width:420px;margin:0 auto 28px}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin:0 auto 28px;text-align:left}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.feat-card i{font-size:18px;color:var(--pink);margin-top:1px;flex-shrink:0}
+.feat-title{font-size:12px;font-weight:700;margin-bottom:2px}
+.feat-desc{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* ── COMMENTS ── */
+.cmt-item{padding:13px 18px;border-bottom:1px solid var(--border)}
+.cmt-hdr{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.cmt-user{font-size:12px;font-weight:700}
+.cmt-post{font-size:11px;color:var(--text3)}
+.cmt-body{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:8px}
+.cmt-reply{flex:1;font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:inherit;outline:none}
+.cmt-reply:focus{border-color:var(--pink)}
 </style>
+</head>
+<body>
 
-<h2 class="sr-only">Instagram page manager with bulk messaging, DMs, comments, and product catalog</h2>
+<nav class="topnav">
+  <div class="brand">
+    <div class="brand-icon"><i class="ti ti-brand-instagram"></i></div>
+    <span class="brand-name">Page Manager</span>
+  </div>
+  <div class="topnav-spacer"></div>
+  <div id="connPill" class="conn-pill"><div class="dot"></div> Not connected</div>
+  <button class="topnav-btn" onclick="showTab('settings')" style="margin-left:10px"><i class="ti ti-plug" style="font-size:14px"></i> Connect</button>
+</nav>
 
-<div class="app">
-  <div class="topbar">
-    <div class="topbar-brand"><i class="ti ti-brand-instagram" aria-hidden="true"></i> Page manager</div>
-    <div class="topbar-spacer"></div>
-    <div id="connBadge" class="conn-badge"><div class="dot"></div> Not connected</div>
-    <button class="btn pink" style="margin-left:8px" onclick="showTab('settings')"><i class="ti ti-key" aria-hidden="true"></i> Connect</button>
-  </div>
-  <div class="layout">
-    <div class="sidebar">
-      <div class="sidebar-section">Broadcast</div>
-      <div class="nav-item" id="nav-bulk" onclick="showTab('bulk')"><i class="ti ti-speakerphone" aria-hidden="true"></i> Bulk message <span class="nav-badge new">New</span></div>
-      <div class="nav-item" id="nav-queue" onclick="showTab('queue')"><i class="ti ti-list-check" aria-hidden="true"></i> Queue <span class="nav-badge" id="queueBadge"></span></div>
-      <div class="sidebar-section" style="margin-top:6px">Inbox</div>
-      <div class="nav-item active" id="nav-dms" onclick="showTab('dms')"><i class="ti ti-message-2" aria-hidden="true"></i> Direct messages <span class="nav-badge" id="dmBadge"></span></div>
-      <div class="sidebar-section" style="margin-top:6px">Content</div>
-      <div class="nav-item" id="nav-catalog" onclick="showTab('catalog')"><i class="ti ti-shopping-bag" aria-hidden="true"></i> Catalog</div>
-      <div class="sidebar-section" style="margin-top:6px">System</div>
-      <div class="nav-item" id="nav-stats" onclick="showTab('stats')"><i class="ti ti-chart-bar" aria-hidden="true"></i> Stats</div>
-      <div class="nav-item" id="nav-settings" onclick="showTab('settings')"><i class="ti ti-settings" aria-hidden="true"></i> Settings</div>
+<div class="shell">
+  <nav class="sidebar">
+    <div class="sidebar-acct" id="sideAcct" style="display:none">
+      <div class="acct-avatar" id="sideAvatarEl">PM</div>
+      <div><div class="acct-name" id="sideNameEl">—</div><div class="acct-handle" id="sideHandleEl"></div></div>
     </div>
-    <div id="mainArea" class="main">
-      <div class="empty-state"><i class="ti ti-brand-instagram" aria-hidden="true"></i><span>Connect your account to start</span><button class="btn pink" style="margin-top:8px" onclick="showTab('settings')"><i class="ti ti-key" aria-hidden="true"></i> Set up</button></div>
+    <div class="sidebar-sec">Broadcast</div>
+    <div class="nav-item" id="nav-bulk" onclick="showTab('bulk')"><i class="ti ti-speakerphone"></i> Bulk message <span class="nav-badge new">New</span></div>
+    <div class="nav-item" id="nav-queue" onclick="showTab('queue')"><i class="ti ti-list-check"></i> Queue <span class="nav-badge" id="queueBadge" style="display:none"></span></div>
+    <div class="sidebar-sec">Inbox</div>
+    <div class="nav-item" id="nav-dms" onclick="showTab('dms')"><i class="ti ti-message-2"></i> Direct messages <span class="nav-badge" id="dmBadge" style="display:none"></span></div>
+    <div class="nav-item" id="nav-comments" onclick="showTab('comments')"><i class="ti ti-message-dots"></i> Comments <span class="nav-badge" id="cmtBadge" style="display:none"></span></div>
+    <div class="sidebar-sec">Content</div>
+    <div class="nav-item" id="nav-catalog" onclick="showTab('catalog')"><i class="ti ti-shopping-bag"></i> Product catalog</div>
+    <div class="sidebar-sec">Analytics</div>
+    <div class="nav-item" id="nav-stats" onclick="showTab('stats')"><i class="ti ti-chart-bar"></i> Stats</div>
+    <div class="sidebar-footer">
+      <div class="nav-item" id="nav-settings" onclick="showTab('settings')" style="margin:0"><i class="ti ti-settings"></i> Settings</div>
     </div>
+  </nav>
+
+  <div class="main" id="mainArea">
+    <!-- Hero shown by default -->
   </div>
-  <div id="logBar" class="log-bar" style="display:none"><div id="logEntries"></div></div>
 </div>
 
-<script>
-const G = {
-  token:'', pageId:'', pageName:'', tone:'friendly',
-  catalog:[], dms:[], comments:[],
-  selectedDmIdx:-1, connected:false,
-  queue:[], selectedTemplate:null,
-  bulkAudience:[], sending:false
-};
+<div id="logBar" class="log-bar" style="display:none"><div id="logEntries"></div></div>
 
-const FESTIVALS = [
-  {id:'dashain', emoji:'🎑', name:'Dashain', desc:'Tika & blessings greetings', badge:'', msg:`Happy Dashain! 🎑✨\n\nWishing you and your family the blessings of Goddess Durga — may this festival bring joy, prosperity, and good health. 🙏\n\nAs a special Dashain gift, we're offering {discount} off on all orders placed this week! Use code DASHAIN24.\n\nShop now: {link}`, category:'festival'},
-  {id:'tihar', emoji:'🪔', name:'Tihar / Deepawali', desc:'Festival of lights wishes', badge:'', msg:`Happy Tihar! 🪔🌸\n\nMay the festival of lights illuminate your life with happiness and success. Wishing you a blessed Tihar from all of us! 🙏\n\nCelebrate with our exclusive Tihar collection — {discount} off sitewide. Offer ends {date}.\n\nOrder here: {link}`, category:'festival'},
-  {id:'newyear', emoji:'🎆', name:'New Year', desc:'New Year greetings + offer', badge:'new', msg:`Happy New Year! 🎆🥂\n\nThank you so much for your support this year — it means everything to us. Wishing you a fantastic {year} filled with good things ahead! 🙏\n\nTo celebrate, enjoy {discount} off your next order with code NY{year}.\n\nShop: {link}`, category:'promo'},
-  {id:'sale', emoji:'🛍️', name:'Flash sale', desc:'Limited-time sale blast', badge:'sale', msg:`Hey {name}! 👋\n\n⚡ FLASH SALE — {discount} off everything for the next 48 hours only!\n\nThis is our biggest sale of the season. Stock is limited so grab yours before it sells out 🔥\n\nShop now 👉 {link}\n\nOffer expires: {date}`, category:'promo'},
-  {id:'restock', emoji:'📦', name:'Restock alert', desc:'Notify interested customers', badge:'', msg:`Great news, {name}! 📦\n\nThe item you were asking about is BACK IN STOCK! We know you\'ve been waiting — get yours before it sells out again 🏃\n\n👉 {link}\n\nReply to this message if you have any questions!`, category:'product'},
-  {id:'thankyou', emoji:'💛', name:'Thank you', desc:'Post-purchase appreciation', badge:'', msg:`Hi {name}! 💛\n\nJust wanted to personally thank you for your recent order — it truly means a lot to us!\n\nWe'd love to hear your feedback and see you rocking our products. Tag us @{page} for a feature! 📸\n\nIf you ever need anything, we're always here. 🙏`, category:'retention'},
-  {id:'christmas', emoji:'🎄', name:'Christmas', desc:'Xmas wishes + promo', badge:'', msg:`Merry Christmas! 🎄✨\n\nWishing you a wonderful holiday season filled with warmth, love, and laughter.\n\nCelebrate with {discount} off your next purchase — use code XMAS at checkout 🎁\n\nShop: {link}`, category:'festival'},
-  {id:'custom', emoji:'✏️', name:'Custom message', desc:'Write your own from scratch', badge:'', msg:'', category:'custom'},
-];
-
-const TONES = {friendly:'Warm and approachable',formal:'Professional and polished',casual:'Short and casual like texting',sales:'Energetic and sales-focused'};
-
-const CLASSIFY_KW = {
-  price:['price','cost','how much','rate','charges','fee','pricing','discount','offer','deal'],
-  stock:['available','in stock','stock','have it','left','quantity','sold out','restock'],
-  order:['order','track','tracking','delivery','shipped','status','received','return','refund','exchange'],
-  collab:['collab','collaborate','partnership','sponsor','promote','paid','pr','gifted','influencer'],
-  complaint:['bad','worst','poor','disappointed','broken','damaged','late','issue','problem','complaint'],
-  spam:['follow back','check my','dm me','free followers','giveaway'],
-};
-function classify(t){ const l=t.toLowerCase(); for(const[c,ks] of Object.entries(CLASSIFY_KW)) if(ks.some(k=>l.includes(k))) return c; return 'general'; }
-function tagLabel(c){ return {price:'Price inquiry',stock:'Stock check',order:'Order status',collab:'Collab',complaint:'Complaint',spam:'Spam',general:'General'}[c]||c; }
-function tagClass(c){ return 'tag tag-'+c; }
-function avatarColor(n){ const cs=[['#FBEAF0','#72243E'],['#E6F1FB','#0C447C'],['#EAF3DE','#27500A'],['#EEEDFE','#3C3489'],['#FAEEDA','#633806']]; return cs[(n||'?').charCodeAt(0)%cs.length]; }
-function initials(n){ return (n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtTime(iso){ if(!iso) return ''; try{ const d=new Date(iso),now=new Date(),df=now-d; if(df<60000) return 'just now'; if(df<3600000) return Math.round(df/60000)+'m ago'; if(df<86400000) return Math.round(df/3600000)+'h ago'; return d.toLocaleDateString([],{month:'short',day:'numeric'}); }catch(e){ return iso; } }
-
-function log(msg,type=''){
-  const bar=document.getElementById('logBar'); bar.style.display='block';
-  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const d=document.getElementById('logEntries');
-  const r=document.createElement('div'); r.className='log-row';
-  r.innerHTML=`<span class="log-t">${now}</span><span class="${type==='ok'?'log-ok':type==='err'?'log-err':type==='warn'?'log-warn':''}">${esc(msg)}</span>`;
-  d.prepend(r); if(d.children.length>25) d.removeChild(d.lastChild);
-}
-
-async function igGet(ep){ const r=await fetch(`https://graph.instagram.com/v21.0/${ep}${ep.includes('?')?'&':'?'}access_token=${G.token}`); if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API '+r.status);} return r.json(); }
-async function igPost(ep,body){ const r=await fetch(`https://graph.instagram.com/v21.0/${ep}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,access_token:G.token})}); if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API '+r.status);} return r.json(); }
-
-function setMain(html){ document.getElementById('mainArea').innerHTML=html; }
-function setNavActive(tab){ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); const el=document.getElementById('nav-'+tab); if(el) el.classList.add('active'); }
-
-function showTab(tab){
-  setNavActive(tab);
-  if(tab==='bulk') renderBulk();
-  else if(tab==='queue') renderQueue();
-  else if(tab==='dms'){ if(G.connected) loadDMs(); else renderSettings(); }
-  else if(tab==='catalog') renderCatalog();
-  else if(tab==='stats') renderStats();
-  else if(tab==='settings') renderSettings();
-}
-
-function renderBulk(){
-  const tpl = G.selectedTemplate;
-  const audienceSegments = [
-    {id:'all_followers', label:'All recent contacts', desc:'Everyone who has messaged your page', count: G.dms.length || '—'},
-    {id:'inquiries', label:'Product inquirers', desc:'People who asked about price or stock', count: G.dms.filter(d=>['price','stock'].includes(d.category)).length || '—'},
-    {id:'no_reply', label:'Unanswered DMs', desc:'Conversations you haven\'t replied to', count: G.dms.filter(d=>!d.replied).length || '—'},
-    {id:'repeat', label:'Past customers', desc:'People with 2+ conversations', count: '—'},
-    {id:'complaint', label:'Complaints', desc:'Customers who raised an issue', count: G.dms.filter(d=>d.category==='complaint').length || '—'},
-    {id:'custom_list', label:'Custom list', desc:'Paste usernames manually', count:'custom'},
-  ];
-
-  const msg = tpl ? tpl.msg : '';
-  const preview = renderPreview(msg);
-
-  setMain(`
-    <div class="toolbar">
-      <i class="ti ti-speakerphone" style="font-size:16px;color:#D4537E" aria-hidden="true"></i>
-      <span style="font-size:13px;font-weight:500;flex:1">Bulk message</span>
-      <span style="font-size:11px;color:var(--color-text-secondary)">Send personalised DMs to multiple people at once</span>
-    </div>
-    <div class="bulk-layout">
-      <div class="bulk-left">
-        <div class="section-hdr"><i class="ti ti-template" aria-hidden="true"></i><span>1. Choose template</span></div>
-        <div style="overflow-y:auto;flex:1">
-          <div class="template-grid">
-            ${FESTIVALS.map(f=>`
-              <div class="tpl-card ${tpl&&tpl.id===f.id?'selected':''}" onclick="selectTemplate('${f.id}')">
-                ${f.badge?`<div class="tpl-badge ${f.badge}">${f.badge}</div>`:''}
-                <div class="tpl-emoji">${f.emoji}</div>
-                <div class="tpl-name">${esc(f.name)}</div>
-                <div class="tpl-desc">${esc(f.desc)}</div>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="bulk-right">
-        <div class="section-hdr"><i class="ti ti-pencil" aria-hidden="true"></i><span>2. Compose</span></div>
-        <div class="composer-area" id="composerArea">
-          ${tpl ? `
-            <div>
-              <label class="field-label">Message</label>
-              <div class="var-pills">
-                ${['{name}','{discount}','{link}','{date}','{year}','{page}'].map(v=>`<span class="var-pill" onclick="insertVar('${v}')" title="Click to insert">${esc(v)}</span>`).join('')}
-              </div>
-              <textarea id="msgText" rows="6" oninput="updatePreview()">${esc(tpl.msg)}</textarea>
-              <div class="char-count" id="charCount">${tpl.msg.length} chars</div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div><label class="field-label">Your name / page</label><input id="varPage" type="text" placeholder="@yourpage" value="${esc(G.pageName)}" oninput="updatePreview()"></div>
-              <div><label class="field-label">Discount code / %</label><input id="varDiscount" type="text" placeholder="e.g. 20% off" oninput="updatePreview()"></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div><label class="field-label">Link</label><input id="varLink" type="text" placeholder="https://..." oninput="updatePreview()"></div>
-              <div><label class="field-label">Date / deadline</label><input id="varDate" type="text" placeholder="Oct 15" oninput="updatePreview()"></div>
-            </div>
-            <div>
-              <label class="field-label">Live preview (as recipient sees it)</label>
-              <div class="preview-bubble" id="msgPreview">${esc(preview)}</div>
-            </div>
-            <div>
-              <label class="field-label">Audience</label>
-              <div class="audience-area" style="padding:0;max-height:180px;overflow-y:auto">
-                ${audienceSegments.map(a=>`
-                  <div class="audience-row ${G.bulkAudience.includes(a.id)?'checked':''}" onclick="toggleAudience('${a.id}',this)">
-                    <input type="checkbox" ${G.bulkAudience.includes(a.id)?'checked':''} readonly>
-                    <div class="audience-info">
-                      <div class="audience-name">${esc(a.label)}</div>
-                      <div class="audience-meta">${esc(a.desc)}</div>
-                    </div>
-                    <div class="audience-count">${a.count}</div>
-                  </div>`).join('')}
-              </div>
-            </div>
-            ${G.bulkAudience.includes('custom_list')?`
-            <div>
-              <label class="field-label">Custom usernames (one per line)</label>
-              <textarea id="customUsers" rows="3" placeholder="@username1&#10;@username2"></textarea>
-            </div>`:''}
-            <div class="send-panel" style="border-top:none;padding:0;background:transparent">
-              <div class="send-summary" id="sendSummary">${buildSendSummary()}</div>
-              <div class="schedule-row">
-                <label><input type="checkbox" id="scheduleChk" onchange="toggleSchedule()"> Schedule for later</label>
-                <input type="datetime-local" id="scheduleTime" style="display:none">
-              </div>
-              <div style="display:flex;gap:8px;margin-top:4px">
-                <button class="btn green" onclick="startBulkSend()" id="sendBtn"><i class="ti ti-send" aria-hidden="true"></i> Send bulk message</button>
-                <button class="btn amber" onclick="addToQueue()"><i class="ti ti-clock" aria-hidden="true"></i> Add to queue</button>
-              </div>
-              <div id="sendProgress" style="display:none">
-                <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-                <div style="font-size:11px;color:var(--color-text-secondary)" id="progressLabel">Preparing...</div>
-              </div>
-            </div>
-          ` : `<div class="empty-state" style="padding:30px"><i class="ti ti-template" aria-hidden="true"></i><span>Select a template to start composing</span></div>`}
-        </div>
-      </div>
-    </div>`);
-}
-
-function selectTemplate(id){
-  G.selectedTemplate = FESTIVALS.find(f=>f.id===id);
-  G.bulkAudience = [];
-  renderBulk();
-}
-
-function insertVar(v){
-  const ta = document.getElementById('msgText');
-  if(!ta) return;
-  const s=ta.selectionStart, e=ta.selectionEnd;
-  ta.value = ta.value.slice(0,s)+v+ta.value.slice(e);
-  ta.selectionStart=ta.selectionEnd=s+v.length;
-  ta.focus(); updatePreview();
-}
-
-function renderPreview(msg){
-  const page = document.getElementById('varPage')?.value || G.pageName || 'yourpage';
-  const discount = document.getElementById('varDiscount')?.value || '20% off';
-  const link = document.getElementById('varLink')?.value || 'yourshop.com';
-  const date = document.getElementById('varDate')?.value || 'this weekend';
-  const year = new Date().getFullYear();
-  return (msg||'')
-    .replace(/\{name\}/g,'Priya')
-    .replace(/\{discount\}/g,discount)
-    .replace(/\{link\}/g,link)
-    .replace(/\{date\}/g,date)
-    .replace(/\{page\}/g,page)
-    .replace(/\{year\}/g,year);
-}
-
-function updatePreview(){
-  const ta=document.getElementById('msgText');
-  const pre=document.getElementById('msgPreview');
-  const cc=document.getElementById('charCount');
-  if(!ta||!pre) return;
-  if(G.selectedTemplate) G.selectedTemplate.msg=ta.value;
-  pre.textContent=renderPreview(ta.value);
-  if(cc) cc.textContent=ta.value.length+' chars';
-  const s=document.getElementById('sendSummary');
-  if(s) s.innerHTML=buildSendSummary();
-}
-
-function toggleAudience(id,el){
-  const idx=G.bulkAudience.indexOf(id);
-  if(idx>-1) G.bulkAudience.splice(idx,1); else G.bulkAudience.push(id);
-  el.classList.toggle('checked',G.bulkAudience.includes(id));
-  el.querySelector('input').checked=G.bulkAudience.includes(id);
-  updatePreview();
-  if(id==='custom_list') renderBulk();
-}
-
-function buildSendSummary(){
-  const count = estimateAudience();
-  const tpl = G.selectedTemplate;
-  if(!tpl) return 'No template selected.';
-  if(!G.bulkAudience.length) return 'Select an audience segment above.';
-  return `Sending <b>${esc(tpl.name)}</b> message to approx. <b>${count} people</b>. Each message will be personalised with their name.`;
-}
-
-function estimateAudience(){
-  let n=0;
-  G.bulkAudience.forEach(id=>{
-    if(id==='all_followers') n+=Math.max(G.dms.length,1);
-    else if(id==='inquiries') n+=G.dms.filter(d=>['price','stock'].includes(d.category)).length;
-    else if(id==='no_reply') n+=G.dms.filter(d=>!d.replied).length;
-    else if(id==='complaint') n+=G.dms.filter(d=>d.category==='complaint').length;
-    else if(id==='custom_list'){ const ta=document.getElementById('customUsers'); n+=(ta?.value||'').split('\n').filter(l=>l.trim()).length; }
-    else n+=1;
-  });
-  return Math.max(n,G.bulkAudience.length?1:0);
-}
-
-function toggleSchedule(){
-  const chk=document.getElementById('scheduleChk');
-  const inp=document.getElementById('scheduleTime');
-  if(inp) inp.style.display=chk?.checked?'':'none';
-}
-
-function getRecipients(){
-  let list=[];
-  G.bulkAudience.forEach(id=>{
-    if(id==='all_followers') list=[...list,...G.dms];
-    else if(id==='inquiries') list=[...list,...G.dms.filter(d=>['price','stock'].includes(d.category))];
-    else if(id==='no_reply') list=[...list,...G.dms.filter(d=>!d.replied)];
-    else if(id==='complaint') list=[...list,...G.dms.filter(d=>d.category==='complaint')];
-    else if(id==='custom_list'){
-      const ta=document.getElementById('customUsers');
-      const users=(ta?.value||'').split('\n').map(l=>l.trim().replace('@','')).filter(Boolean);
-      list=[...list,...users.map(u=>({sender:u,senderId:null,id:'custom_'+u}))];
-    } else if(id==='repeat') list=[...list,...G.dms.slice(0,3)];
-  });
-  const seen=new Set(); return list.filter(r=>{ if(seen.has(r.id)) return false; seen.add(r.id); return true; });
-}
-
-async function startBulkSend(){
-  if(G.sending){ log('Already sending','warn'); return; }
-  const msgTemplate=document.getElementById('msgText')?.value?.trim();
-  if(!msgTemplate){ alert('Write a message first'); return; }
-  if(!G.bulkAudience.length){ alert('Select an audience segment'); return; }
-  const recipients=getRecipients();
-  if(!recipients.length){ alert('No recipients in selected segments. Load DMs first.'); return; }
-
-  const schedChk=document.getElementById('scheduleChk');
-  const schedTime=document.getElementById('scheduleTime')?.value;
-  if(schedChk?.checked && schedTime){
-    addToQueue(schedTime); return;
-  }
-
-  if(!confirm(`Send to ${recipients.length} people? This will use Instagram's messaging API.`)) return;
-  if(!G.connected){ alert('Connect your Instagram account first in Settings.'); return; }
-
-  G.sending=true;
-  const btn=document.getElementById('sendBtn');
-  if(btn){ btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Sending...'; }
-  const prog=document.getElementById('sendProgress');
-  if(prog) prog.style.display='block';
-
-  let sent=0, failed=0;
-  for(let i=0;i<recipients.length;i++){
-    const r=recipients[i];
-    const personalised=msgTemplate
-      .replace(/\{name\}/g,r.sender?.split(' ')[0]||'there')
-      .replace(/\{discount\}/g,document.getElementById('varDiscount')?.value||'')
-      .replace(/\{link\}/g,document.getElementById('varLink')?.value||'')
-      .replace(/\{date\}/g,document.getElementById('varDate')?.value||'')
-      .replace(/\{page\}/g,G.pageName||document.getElementById('varPage')?.value||'')
-      .replace(/\{year\}/g,new Date().getFullYear());
-
-    try{
-      if(r.senderId){
-        await igPost('me/messages',{recipient:{id:r.senderId},message:{text:personalised}});
-      } else {
-        log(`Skipped @${r.sender} — no ID (custom list)`, 'warn');
-      }
-      sent++;
-      G.queue.push({id:Date.now()+i,recipient:r.sender,preview:personalised.slice(0,60),status:'sent',time:new Date().toISOString()});
-    } catch(e){
-      failed++;
-      G.queue.push({id:Date.now()+i,recipient:r.sender,preview:personalised.slice(0,60),status:'failed',time:new Date().toISOString(),error:e.message});
-      log(`Failed to send to ${r.sender}: ${e.message}`,'err');
-    }
-    const pct=Math.round((i+1)/recipients.length*100);
-    const pb=document.getElementById('progressBar');
-    const pl=document.getElementById('progressLabel');
-    if(pb) pb.style.width=pct+'%';
-    if(pl) pl.textContent=`Sent ${i+1} of ${recipients.length}${failed?' ('+failed+' failed)':''}`;
-    await new Promise(res=>setTimeout(res,350));
-  }
-
-  G.sending=false;
-  if(btn){ btn.disabled=false; btn.innerHTML='<i class="ti ti-send" aria-hidden="true"></i> Send bulk message'; }
-  updateQueueBadge();
-  log(`Bulk send complete: ${sent} sent, ${failed} failed`,'ok');
-  alert(`Done! ${sent} sent${failed?', '+failed+' failed':''}.`);
-}
-
-function addToQueue(schedTime){
-  const msgTemplate=document.getElementById('msgText')?.value?.trim();
-  if(!msgTemplate){ alert('Write a message first'); return; }
-  const recipients=getRecipients();
-  const tpl=G.selectedTemplate;
-  const item={
-    id:Date.now(), type:'bulk',
-    name:tpl?.name||'Custom',
-    recipient:`${recipients.length} recipients`,
-    preview:msgTemplate.slice(0,60),
-    status: schedTime?'scheduled':'pending',
-    scheduledFor: schedTime||null,
-    time:new Date().toISOString(),
-    recipients, msgTemplate,
-    vars:{
-      discount:document.getElementById('varDiscount')?.value||'',
-      link:document.getElementById('varLink')?.value||'',
-      date:document.getElementById('varDate')?.value||'',
-      page:document.getElementById('varPage')?.value||G.pageName||''
-    }
-  };
-  G.queue.push(item);
-  updateQueueBadge();
-  log(`Added "${item.name}" to queue (${recipients.length} recipients${schedTime?' scheduled for '+schedTime:''})`,'ok');
-  showTab('queue');
-}
-
-function updateQueueBadge(){
-  const b=document.getElementById('queueBadge');
-  const pending=G.queue.filter(q=>q.status==='pending'||q.status==='scheduled').length;
-  if(b){ b.textContent=pending||''; b.className='nav-badge'+(pending?'':' g'); }
-}
-
-function renderQueue(){
-  const html=`
-    <div class="toolbar">
-      <i class="ti ti-list-check" style="font-size:16px;color:#D4537E" aria-hidden="true"></i>
-      <span style="font-size:13px;font-weight:500;flex:1">Message queue</span>
-      <button class="btn" onclick="clearDoneQueue()"><i class="ti ti-trash" aria-hidden="true"></i> Clear done</button>
-    </div>
-    <div class="pane">
-      ${G.queue.length ? `<div class="queue-list">${G.queue.slice().reverse().map((q,i)=>`
-        <div class="queue-item">
-          <div>
-            <span class="queue-status qs-${q.status}">${q.status}</span>
-            ${q.scheduledFor?`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:3px"><i class="ti ti-clock" aria-hidden="true"></i> ${esc(q.scheduledFor)}</div>`:''}
-          </div>
-          <div class="queue-body">
-            <div class="queue-name">${esc(q.name||q.recipient)} ${q.type==='bulk'?`<span style="font-size:10px;color:var(--color-text-tertiary)">(${esc(q.recipient)})</span>`:''}</div>
-            <div class="queue-preview">${esc(q.preview)}…</div>
-            ${q.error?`<div style="font-size:10px;color:var(--color-text-danger)">${esc(q.error)}</div>`:''}
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
-            <span class="queue-time">${fmtTime(q.time)}</span>
-            ${q.status==='pending'?`<button class="btn green" style="padding:4px 8px;font-size:11px" onclick="sendQueueItem(${G.queue.length-1-i})"><i class="ti ti-send" aria-hidden="true"></i> Send now</button>`:''}
-          </div>
-        </div>`).join('')}</div>`
-      : '<div class="empty-state"><i class="ti ti-list-check" aria-hidden="true"></i><span>Queue is empty — add bulk messages from the Bulk message tab</span></div>'}
-    </div>`;
-  setMain(html);
-}
-
-async function sendQueueItem(i){
-  const item=G.queue[i];
-  if(!item||item.status!=='pending') return;
-  if(!G.connected){ alert('Connect Instagram first'); return; }
-  item.status='sent'; updateQueueBadge(); renderQueue();
-  log(`Sent queued message "${item.name}"`, 'ok');
-}
-
-function clearDoneQueue(){
-  G.queue=G.queue.filter(q=>q.status==='pending'||q.status==='scheduled');
-  updateQueueBadge(); renderQueue();
-}
-
-async function loadDMs(){
-  if(!G.connected){ showTab('settings'); return; }
-  setMain('<div style="padding:20px 16px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--color-text-secondary)"><div class="spinner"></div> Loading DMs...</div>');
-  log('Fetching DMs...');
-  try{
-    const data=await igGet(`${G.pageId}/conversations?platform=instagram&fields=id,updated_time,participants,messages{message,from,created_time}`);
-    const convos=data.data||[];
-    G.dms=convos.map(c=>{
-      const msgs=c.messages?.data||[];
-      const lm=msgs[0]||{};
-      const other=(c.participants?.data||[]).find(p=>p.id!==G.pageId)||(c.participants?.data||[])[0]||{};
-      const text=lm.message||'';
-      return{id:c.id,updatedTime:c.updated_time,sender:other.name||other.username||'User'+c.id.slice(-4),senderId:other.id,lastMessage:text,category:classify(text),messages:msgs.map(m=>({text:m.message,from:m.from?.id===G.pageId?'us':'them',time:m.created_time})).reverse(),unread:true,replied:false};
-    });
-    document.getElementById('dmBadge').textContent=G.dms.filter(d=>d.unread).length||'';
-    renderDMsView();
-    log(`Loaded ${G.dms.length} conversations`,'ok');
-  }catch(e){
-    setMain(`<div class="empty-state"><i class="ti ti-alert-circle" aria-hidden="true"></i><span style="color:var(--color-text-danger)">${esc(e.message)}</span></div>`);
-    log('DMs failed: '+e.message,'err');
-  }
-}
-
-function renderDMsView(){
-  const html=`
-    <div class="toolbar">
-      <input type="text" id="dmSearch" placeholder="Search conversations..." oninput="filterDMs(this.value)" style="flex:1">
-      <button class="btn" onclick="loadDMs()"><i class="ti ti-refresh" aria-hidden="true"></i></button>
-    </div>
-    <div style="display:flex;flex:1;overflow:hidden">
-      <div class="pane" id="dmList" style="flex:1;overflow-y:auto">
-        ${G.dms.length?G.dms.map((d,i)=>`
-          <div class="msg-item ${d.unread?'unread':''}" onclick="selectDM(${i})">
-            <div class="${d.unread?'unread-dot':'read-spc'}"></div>
-            <div class="avatar" style="background:${avatarColor(d.sender)[0]};color:${avatarColor(d.sender)[1]}">${esc(initials(d.sender))}</div>
-            <div class="msg-body">
-              <div class="msg-row1"><span class="msg-sender">${esc(d.sender)}</span><span class="msg-time">${fmtTime(d.updatedTime)}</span></div>
-              <div class="msg-preview">${esc(d.lastMessage)}</div>
-              <div style="display:flex;gap:4px;margin-top:2px"><span class="${tagClass(d.category)}">${tagLabel(d.category)}</span>${d.replied?'<span class="tag" style="background:#EAF3DE;color:#3B6D11">Replied</span>':''}</div>
-            </div>
-          </div>`).join('')
-        :'<div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i><span>No conversations</span></div>'}
-      </div>
-      <div class="detail" id="dmDetail"><div class="empty-state"><i class="ti ti-message-2" aria-hidden="true"></i><span>Select a conversation</span></div></div>
-    </div>`;
-  setMain(html);
-}
-
-function filterDMs(q){ document.querySelectorAll('.msg-item').forEach(el=>{ el.style.display=el.textContent.toLowerCase().includes(q.toLowerCase())?'':'none'; }); }
-
-function selectDM(i){
-  G.selectedDmIdx=i;
-  const dm=G.dms[i]; dm.unread=false;
-  const det=document.getElementById('dmDetail'); if(!det) return;
-  const [bg,fg]=avatarColor(dm.sender);
-  const draft=genDraft(dm);
-  det.innerHTML=`
-    <div class="detail-hdr">
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px">
-        <div class="avatar" style="background:${bg};color:${fg}">${esc(initials(dm.sender))}</div>
-        <div><div style="font-size:13px;font-weight:500">${esc(dm.sender)}</div><div style="font-size:11px;color:var(--color-text-secondary)">${tagLabel(dm.category)}</div></div>
-      </div>
-    </div>
-    <div class="thread" id="dmThread">
-      ${dm.messages.map(m=>`<div><div class="bubble ${m.from}">${esc(m.text)}</div><div class="bubble-time" style="text-align:${m.from==='us'?'right':'left'}">${fmtTime(m.time)}</div></div>`).join('')}
-    </div>
-    <div class="reply-area">
-      <div class="reply-label"><i class="ti ti-sparkles" aria-hidden="true"></i> Draft</div>
-      <textarea class="draft-text" id="draftText" rows="3">${esc(draft)}</textarea>
-      <div class="reply-actions">
-        <button class="btn green" onclick="sendDM(${i})"><i class="ti ti-send" aria-hidden="true"></i> Send</button>
-        <button class="btn" onclick="document.getElementById('draftText').value=genDraftById(${i})"><i class="ti ti-refresh" aria-hidden="true"></i></button>
-        <button class="btn" onclick="navigator.clipboard?.writeText(document.getElementById('draftText').value)"><i class="ti ti-copy" aria-hidden="true"></i></button>
-      </div>
-    </div>`;
-  const th=document.getElementById('dmThread'); if(th) th.scrollTop=th.scrollHeight;
-  document.querySelectorAll('.msg-item').forEach((el,j)=>el.classList.toggle('selected',j===i));
-}
-
-function genDraft(dm){ return genDraftForDm(dm); }
-function genDraftById(i){ return genDraftForDm(G.dms[i]); }
-function genDraftForDm(dm){
-  const cat=dm.category, name=dm.sender.split(' ')[0], msg=dm.lastMessage;
-  const match=G.catalog.find(p=>msg.toLowerCase().includes(p.name.toLowerCase()));
-  if(cat==='price'){ if(match) return `Hi ${name}! 👋 Thanks for your interest in ${match.name}. It's priced at ${match.price}. ${match.stock>0?'We have it in stock and ready to ship! 🛍️':'Currently out of stock but restocking soon!'} DM us to order!`; return `Hi ${name}! Which product are you asking about? We'd love to share the price! 😊`; }
-  if(cat==='stock'){ if(match) return `Hey ${name}! ${match.name} is ${match.stock>0?`in stock — ${match.stock} units available! 🎉`:'out of stock right now. Want us to notify you when it's back?'}`; return `Hi ${name}! Which item are you looking for? We'll check availability right away!`; }
-  if(cat==='order') return `Hi ${name}! Please share your order number and we'll look into this immediately. We're here to help! 🙏`;
-  if(cat==='collab') return `Hi ${name}! 👋 Thanks for reaching out about a collab — we love connecting with creators! Could you share your media kit or more details? We'll review and get back soon!`;
-  if(cat==='complaint') return `Hi ${name}, we're really sorry about this. Please share more details so we can make it right for you. Every customer matters to us. 🙏`;
-  return `Hi ${name}! Thanks for reaching out. How can we help you today? 😊`;
-}
-
-async function sendDM(i){
-  const text=document.getElementById('draftText')?.value?.trim();
-  if(!text||!confirm('Send this reply?')) return;
-  const dm=G.dms[i];
-  try{ await igPost('me/messages',{recipient:{id:dm.senderId},message:{text}}); dm.replied=true; dm.messages.push({text,from:'us',time:new Date().toISOString()}); selectDM(i); log(`Sent to ${dm.sender}`,'ok'); }
-  catch(e){ log('Send failed: '+e.message,'err'); alert('Failed: '+e.message); }
-}
-
-function renderCatalog(){
-  const html=`
-    <div class="toolbar"><span style="font-size:13px;font-weight:500;flex:1">Product catalog</span><button class="btn pink" onclick="showAddProduct()"><i class="ti ti-plus" aria-hidden="true"></i> Add</button></div>
-    <div class="pane" style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
-      ${G.catalog.length?G.catalog.map((p,i)=>`
-        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px 13px;display:flex;gap:10px;align-items:flex-start">
-          <div style="width:40px;height:40px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-package" style="font-size:18px;color:var(--color-text-tertiary)" aria-hidden="true"></i></div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:500">${esc(p.name)}</div>
-            <div style="font-size:12px;color:#3B6D11;font-weight:500">${esc(p.price)}</div>
-            <div style="font-size:11px;color:var(--color-text-tertiary)">${p.stock>0?p.stock+' in stock':'Out of stock'}</div>
-          </div>
-          <button class="btn" style="padding:4px 8px" onclick="G.catalog.splice(${i},1);renderCatalog()" aria-label="Remove"><i class="ti ti-trash" style="font-size:13px" aria-hidden="true"></i></button>
-        </div>`).join('')
-      :'<div class="empty-state"><i class="ti ti-shopping-bag" aria-hidden="true"></i><span>Add products so the agent can answer inquiries</span></div>'}
-      <div id="addProductForm" style="display:none;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div><label class="field-label" style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px">Name</label><input id="pName" type="text" style="width:100%;font-size:12px;padding:6px 9px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary)" placeholder="Product name"></div>
-          <div><label class="field-label" style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px">Price</label><input id="pPrice" type="text" style="width:100%;font-size:12px;padding:6px 9px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary)" placeholder="NPR 500"></div>
-        </div>
-        <div style="margin-bottom:8px"><label class="field-label" style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px">Stock</label><input id="pStock" type="number" min="0" style="width:100%;font-size:12px;padding:6px 9px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary)" placeholder="0"></div>
-        <div style="display:flex;gap:6px"><button class="btn pink" onclick="addProduct()"><i class="ti ti-plus" aria-hidden="true"></i> Add</button><button class="btn" onclick="document.getElementById('addProductForm').style.display='none'">Cancel</button></div>
-      </div>
-    </div>`;
-  setMain(html);
-}
-function showAddProduct(){ document.getElementById('addProductForm').style.display='block'; document.getElementById('pName').focus(); }
-function addProduct(){ const n=document.getElementById('pName').value.trim(),p=document.getElementById('pPrice').value.trim(),s=parseInt(document.getElementById('pStock').value)||0; if(!n||!p){alert('Name and price required');return;} G.catalog.push({name:n,price:p,stock:s}); renderCatalog(); log('Added: '+n,'ok'); }
-
-function renderStats(){
-  const total=G.dms.length; const replied=G.dms.filter(d=>d.replied).length;
-  const qSent=G.queue.filter(q=>q.status==='sent').length;
-  const byC={}; G.dms.forEach(d=>{ byC[d.category]=(byC[d.category]||0)+1; });
-  const rate=total>0?Math.round(replied/total*100):0;
-  setMain(`
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total DMs</div><div class="stat-val">${total}</div></div>
-      <div class="stat-card"><div class="stat-label">Replied</div><div class="stat-val">${replied}</div></div>
-      <div class="stat-card"><div class="stat-label">Reply rate</div><div class="stat-val">${rate}%</div></div>
-      <div class="stat-card"><div class="stat-label">Bulk sent</div><div class="stat-val">${qSent}</div></div>
-    </div>
-    <div style="padding:0 16px 16px">
-      <div style="font-size:12px;font-weight:500;margin-bottom:10px;color:var(--color-text-secondary)">DM breakdown</div>
-      ${Object.entries(byC).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-          <span class="${tagClass(c)}" style="min-width:100px">${tagLabel(c)}</span>
-          <div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden"><div style="height:100%;width:${total>0?Math.round(n/total*100):0}%;background:#D4537E;border-radius:3px"></div></div>
-          <span style="font-size:12px;color:var(--color-text-secondary);min-width:24px;text-align:right">${n}</span>
-        </div>`).join('')||'<div style="font-size:12px;color:var(--color-text-tertiary)">Load DMs to see stats</div>'}
-    </div>`);
-}
-
-function renderSettings(){
-  setMain(`
-    <div class="setup-box">
-      <div class="setup-card">
-        <h3><i class="ti ti-key" aria-hidden="true"></i> Instagram Graph API</h3>
-        <p>Requires a Meta Business account with an Instagram Professional page. Generate a long-lived token from <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a> with <code>instagram_manage_messages</code> and <code>instagram_manage_comments</code> permissions.</p>
-        <label style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px">Access token</label>
-        <input id="inToken" type="password" placeholder="EAAxxxxxxxxxxxxxx..." value="${esc(G.token)}">
-        <label style="font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px">Instagram Business Account ID</label>
-        <input id="inPageId" type="text" placeholder="17841xxxxxxxxxx" value="${esc(G.pageId)}">
-        <button class="btn pink" onclick="connect()"><i class="ti ti-plug" aria-hidden="true"></i> ${G.connected?'Reconnect':'Connect'}</button>
-      </div>
-      <div class="setup-card">
-        <h3><i class="ti ti-pencil" aria-hidden="true"></i> Default reply tone</h3>
-        <div class="tone-pills">${Object.keys(TONES).map(t=>`<div class="tone-pill ${G.tone===t?'active':''}" onclick="G.tone='${t}';renderSettings()">${t.charAt(0).toUpperCase()+t.slice(1)}</div>`).join('')}</div>
-        <div style="font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:7px 10px;border-radius:var(--border-radius-md)">${esc(TONES[G.tone])}</div>
-      </div>
-    </div>`);
-}
-
-async function connect(){
-  const t=document.getElementById('inToken')?.value?.trim();
-  const p=document.getElementById('inPageId')?.value?.trim();
-  if(!t||!p){alert('Enter both token and Account ID');return;}
-  G.token=t; G.pageId=p;
-  log('Connecting...');
-  try{
-    const info=await igGet(`${p}?fields=name,username,followers_count`);
-    G.pageName=info.name||info.username||p; G.connected=true;
-    document.getElementById('connBadge').className='conn-badge ok';
-    document.getElementById('connBadge').innerHTML=`<div class="dot"></div> ${esc(G.pageName)}`;
-    log(`Connected as ${G.pageName}`,'ok');
-    showTab('dms');
-  }catch(e){ log('Failed: '+e.message,'err'); alert('Could not connect: '+e.message); }
-}
-
-renderSettings();
-</script>
+<script src="app.js"></script>
+</body>
+</html>
