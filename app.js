@@ -177,13 +177,16 @@ function renderSettings() {
               <div style="font-size:11px;color:var(--text2)">Opens Meta's token tool — just click Allow and copy the token</div>
             </div>
           </div>
-          <a href="https://developers.facebook.com/tools/explorer/?method=GET&path=me%3Ffields%3Did%2Cname&version=v21.0" target="_blank" rel="noopener" style="text-decoration:none;display:block">
+          <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener" style="text-decoration:none;display:block">
             <button class="btn btn-grad" style="width:100%;justify-content:center;padding:11px;font-size:13px">
               <i class="ti ti-external-link"></i> Open Meta Token Tool
             </button>
           </a>
-          <div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r);font-size:12px;color:var(--text2);line-height:1.7">
-            On that page: <strong style="color:var(--text)">1)</strong> Select your app &nbsp;<strong style="color:var(--text)">2)</strong> Click "Generate Access Token" &nbsp;<strong style="color:var(--text)">3)</strong> Copy the token that appears
+          <div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r);font-size:12px;color:var(--text2);line-height:1.8">
+            On the Explorer page:<br>
+            <strong style="color:var(--text)">1)</strong> Top right — select your Meta App from the dropdown<br>
+            <strong style="color:var(--text)">2)</strong> Click <strong style="color:var(--text)">"Generate Access Token"</strong> and log in<br>
+            <strong style="color:var(--text)">3)</strong> Copy the long token that appears in the box
           </div>
         </div>
 
