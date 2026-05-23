@@ -182,24 +182,90 @@ function renderSettings() {
 
   const tokenForm = step === 3 ? `
     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
-      <div style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-plug" style="color:var(--pink)"></i> Paste your credentials</div>
-      <label class="field-label">Access token</label>
-      <div class="input-wrap">
-        <input id="inToken" type="password" class="input-field" placeholder="EAAxxxxxxxxxxxxxx..." value="${esc(G.token)}">
-        <button class="eye-btn" onclick="toggleTokenVis()"><i class="ti ti-eye" id="eyeIcon"></i></button>
+
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px">
+        <i class="ti ti-wand" style="color:var(--pink)"></i> Smart token detector
       </div>
-      <label class="field-label">Instagram Business Account ID</label>
-      <div style="display:flex;gap:8px;margin-bottom:6px">
-        <input id="inPageId" type="text" class="input-field" placeholder="17841xxxxxxxxxx" value="${esc(G.pageId)}" style="flex:1">
-        <a href="https://www.facebook.com/help/1558356551275731" target="_blank" rel="noopener" style="text-decoration:none"><button class="btn" title="How to find my ID"><i class="ti ti-help"></i></button></a>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6">
+        Paste your token below — the app will automatically detect it, validate it, and find your Account ID. No manual copying needed.
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:14px"><i class="ti ti-info-circle" style="vertical-align:-1px"></i> Found in Meta Business Settings → Accounts → Instagram, or in the Graph API Explorer after connecting.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-grad" onclick="connect()" id="connectBtn" style="padding:9px 20px"><i class="ti ti-plug"></i> Connect to Instagram</button>
-        <a href="https://developers.facebook.com/tools/debug/accesstoken/" target="_blank" rel="noopener" style="text-decoration:none"><button class="btn"><i class="ti ti-shield-check"></i> Verify token</button></a>
+
+      <!-- PASTE ZONE -->
+      <div id="pasteZone" onclick="document.getElementById('inToken').focus()"
+        style="border:2px dashed var(--border2);border-radius:var(--rl);padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;background:var(--bg3);position:relative">
+        <div id="pasteIcon" style="font-size:32px;margin-bottom:8px">📋</div>
+        <div id="pasteLabel" style="font-size:13px;font-weight:600;color:var(--text2)">Click here then paste your token</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">Ctrl+V / Cmd+V — or type it manually below</div>
+        <input id="inToken" type="text"
+          style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"
+          placeholder=""
+          value="${esc(G.token)}"
+          oninput="onTokenInput(this.value)"
+          onpaste="onTokenPaste(event)">
+      </div>
+
+      <!-- TOKEN STATUS BAR -->
+      <div id="tokenStatus" style="display:${G.token?'flex':'none'};align-items:center;gap:10px;padding:10px 13px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);margin-bottom:14px;font-size:12px">
+        <div id="tokenStatusIcon" style="font-size:18px">⏳</div>
+        <div style="flex:1;min-width:0">
+          <div id="tokenStatusTitle" style="font-weight:600;margin-bottom:2px">Detecting token...</div>
+          <div id="tokenStatusSub" style="color:var(--text2);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${G.token ? G.token.slice(0,24)+'…' : ''}</div>
+        </div>
+        <button onclick="clearToken()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px" title="Clear">✕</button>
+      </div>
+
+      <!-- ACCOUNT ID (auto-filled or manual) -->
+      <div id="accountIdSection" style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+          <label class="field-label" style="margin:0">Instagram Business Account ID</label>
+          <div id="accountIdBadge" style="display:none;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green)">
+            <i class="ti ti-sparkles"></i> Auto-detected
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;position:relative">
+            <input id="inPageId" type="text" class="input-field" placeholder="Will be filled automatically…" value="${esc(G.pageId)}" oninput="onPageIdInput(this.value)">
+            <div id="pageIdSpinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%)"><div class="spinner"></div></div>
+          </div>
+          <a href="https://www.facebook.com/help/1558356551275731" target="_blank" rel="noopener" style="text-decoration:none">
+            <button class="btn" title="How to find my Account ID"><i class="ti ti-help"></i></button>
+          </a>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:5px">
+          <i class="ti ti-info-circle" style="vertical-align:-1px"></i>
+          If not auto-filled: Meta Business Settings → Accounts → Instagram → your account ID
+        </div>
+      </div>
+
+      <!-- ACCOUNT PREVIEW (shown after auto-detect) -->
+      <div id="acctPreview" style="display:none;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Detected account</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div id="prevAvatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0"></div>
+          <div style="flex:1;min-width:0">
+            <div id="prevName" style="font-size:14px;font-weight:700"></div>
+            <div id="prevHandle" style="font-size:12px;color:var(--text2)"></div>
+            <div id="prevStats" style="font-size:11px;color:var(--text3);margin-top:2px"></div>
+          </div>
+          <div id="prevCheck" style="width:28px;height:28px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:16px">✓</div>
+        </div>
+      </div>
+
+      <!-- CONNECT BUTTON -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-grad" onclick="connect()" id="connectBtn" style="padding:10px 24px;font-size:13px">
+          <i class="ti ti-plug"></i> Connect to Instagram
+        </button>
+        <a href="https://developers.facebook.com/tools/debug/accesstoken/" target="_blank" rel="noopener" style="text-decoration:none">
+          <button class="btn"><i class="ti ti-shield-check"></i> Verify token</button>
+        </a>
+        <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener" style="text-decoration:none">
+          <button class="btn"><i class="ti ti-external-link"></i> Get token</button>
+        </a>
       </div>
       <div id="connResult"></div>
     </div>
+
     ${G.connected?`
     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
       <div style="font-size:14px;font-weight:700;margin-bottom:10px">Reply tone</div>
@@ -248,11 +314,162 @@ function renderSettings() {
     </div>`);
 }
 
-function toggleTokenVis() {
-  const inp=document.getElementById('inToken'),icon=document.getElementById('eyeIcon');
-  if(!inp) return;
-  inp.type = inp.type==='password'?'text':'password';
-  if(icon) icon.className = inp.type==='password'?'ti ti-eye':'ti ti-eye-off';
+// ── TOKEN AUTO-DETECTOR ───────────────────────────────────────────────────────
+let _tokenTimer = null;
+
+function onTokenPaste(e) {
+  const pasted = (e.clipboardData||window.clipboardData).getData('text').trim();
+  if (!pasted) return;
+  e.preventDefault();
+  const inp = document.getElementById('inToken');
+  if (inp) inp.value = pasted;
+  handleToken(pasted);
+}
+
+function onTokenInput(val) {
+  const v = val.trim();
+  if (!v) { clearToken(); return; }
+  clearTimeout(_tokenTimer);
+  _tokenTimer = setTimeout(() => handleToken(v), 600);
+}
+
+function onPageIdInput() {
+  const badge = document.getElementById('accountIdBadge');
+  if (badge) badge.style.display = 'none';
+}
+
+async function handleToken(raw) {
+  const token = raw.replace(/\s/g,'');
+  G.token = token;
+  setPasteZone('detecting');
+
+  try {
+    const me = await igGetRaw(`me?fields=id,name&access_token=${token}`);
+    if (me.error) throw new Error(me.error.message);
+    setPasteZone('valid');
+    setTokenStatus('valid', `Token valid · User: ${me.name||me.id}`, token.slice(0,28)+'…');
+    log('Token validated for: '+me.name,'ok');
+    await autoFindAccountId(token, me.id);
+  } catch(e) {
+    setPasteZone('invalid');
+    setTokenStatus('invalid', 'Invalid token — check and try again', e.message);
+    log('Token invalid: '+e.message,'err');
+  }
+}
+
+function setPasteZone(state) {
+  const zone = document.getElementById('pasteZone');
+  const icon = document.getElementById('pasteIcon');
+  const lbl  = document.getElementById('pasteLabel');
+  if (!zone) return;
+  const map = {
+    idle:      {border:'var(--border2)', bg:'var(--bg3)',       emoji:'📋', color:'',             text:'Click here then paste your token'},
+    detecting: {border:'var(--amber)',   bg:'var(--amber-bg)',  emoji:'🔍', color:'var(--amber)',  text:'Detecting token…'},
+    valid:     {border:'var(--green)',   bg:'var(--green-bg)',  emoji:'✅', color:'var(--green)',  text:'Token valid!'},
+    invalid:   {border:'var(--red)',     bg:'var(--red-bg)',    emoji:'❌', color:'var(--red)',    text:'Invalid token — try again'},
+  };
+  const m = map[state]||map.idle;
+  zone.style.borderColor = m.border;
+  zone.style.background  = m.bg;
+  if (icon) icon.textContent = m.emoji;
+  if (lbl)  { lbl.style.color = m.color; lbl.textContent = m.text; }
+}
+
+function setTokenStatus(state, title, sub) {
+  const bar   = document.getElementById('tokenStatus');
+  const sIcon = document.getElementById('tokenStatusIcon');
+  const sTit  = document.getElementById('tokenStatusTitle');
+  const sSub  = document.getElementById('tokenStatusSub');
+  if (!bar) return;
+  bar.style.display = 'flex';
+  const icons = {valid:'✅', invalid:'❌', detecting:'⏳', loading:'⏳'};
+  const colors = {valid:'var(--green)', invalid:'var(--red)', detecting:'var(--amber)', loading:'var(--amber)'};
+  if (sIcon) sIcon.textContent = icons[state]||'⏳';
+  if (sTit)  { sTit.textContent = title; sTit.style.color = colors[state]||''; }
+  if (sSub)  sSub.textContent = sub||'';
+}
+
+async function autoFindAccountId(token, userId) {
+  const spinner = document.getElementById('pageIdSpinner');
+  const inp     = document.getElementById('inPageId');
+  const badge   = document.getElementById('accountIdBadge');
+  if (spinner) spinner.style.display = 'block';
+  setTokenStatus('loading', 'Token valid · Finding your Instagram account…', '');
+
+  let igId = null;
+
+  // Try 1: /user/accounts → look for linked IG business account
+  try {
+    const accts = await igGetRaw(`${userId}/accounts?fields=id,name,instagram_business_account&access_token=${token}`);
+    for (const page of (accts.data||[])) {
+      if (page.instagram_business_account?.id) { igId = page.instagram_business_account.id; break; }
+    }
+  } catch(e) {}
+
+  // Try 2: /me/instagram_accounts
+  if (!igId) {
+    try {
+      const ia = await igGetRaw(`me/instagram_accounts?fields=id,name,username&access_token=${token}`);
+      if ((ia.data||[]).length) igId = ia.data[0].id;
+    } catch(e) {}
+  }
+
+  // Try 3: userId itself might be the IG Business Account
+  if (!igId) {
+    try {
+      const d = await igGetRaw(`${userId}?fields=id,username,followers_count&access_token=${token}`);
+      if (d.username || d.followers_count !== undefined) igId = d.id;
+    } catch(e) {}
+  }
+
+  if (spinner) spinner.style.display = 'none';
+
+  if (igId) {
+    G.pageId = igId;
+    if (inp)   inp.value = igId;
+    if (badge) { badge.style.display = 'flex'; }
+    setTokenStatus('valid', 'Token valid · Account ID auto-detected ✨', 'ID: '+igId);
+    log('Account ID auto-detected: '+igId,'ok');
+    await showAccountPreview(token, igId);
+  } else {
+    setTokenStatus('valid', 'Token valid · Enter Account ID manually', 'Could not detect automatically');
+    log('Could not auto-detect Account ID','warn');
+  }
+}
+
+async function showAccountPreview(token, igId) {
+  try {
+    const info = await igGetRaw(`${igId}?fields=name,username,followers_count,media_count&access_token=${token}`);
+    if (info.error) return;
+    const preview = document.getElementById('acctPreview');
+    if (!preview) return;
+    const name = info.name||info.username||igId;
+    G.pageName = name; G.pageUsername = info.username||''; G.followers = info.followers_count||0;
+    document.getElementById('prevAvatar').textContent = initials(name);
+    document.getElementById('prevName').textContent   = name;
+    document.getElementById('prevHandle').textContent = info.username ? '@'+info.username : '';
+    document.getElementById('prevStats').textContent  = (info.followers_count?info.followers_count.toLocaleString()+' followers':'')+(info.media_count?' · '+info.media_count+' posts':'');
+    preview.style.display = 'block';
+    log('Account preview: '+name,'ok');
+  } catch(e) {}
+}
+
+// Raw Graph API call — tries direct first (works if CORS allows), falls back to proxy
+async function igGetRaw(endpoint) {
+  const url = `https://graph.instagram.com/v21.0/${endpoint}`;
+  let r;
+  try { r = await fetch(url); }
+  catch(e) { r = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`); }
+  return r.json();
+}
+
+function clearToken() {
+  G.token=''; G.pageId='';
+  ['inToken','inPageId'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  setPasteZone('idle');
+  const bar=document.getElementById('tokenStatus');if(bar)bar.style.display='none';
+  const prev=document.getElementById('acctPreview');if(prev)prev.style.display='none';
+  const badge=document.getElementById('accountIdBadge');if(badge)badge.style.display='none';
 }
 
 function copyText(t) {
@@ -260,29 +477,27 @@ function copyText(t) {
 }
 
 async function connect() {
-  const t=document.getElementById('inToken')?.value?.trim();
-  const p=document.getElementById('inPageId')?.value?.trim();
-  const res=document.getElementById('connResult');
-  if(!t){showConnResult('err','Enter your access token'); return;}
-  if(!p){showConnResult('err','Enter your Instagram Business Account ID'); return;}
-  const btn=document.getElementById('connectBtn');
-  if(btn){btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Connecting...';}
+  const t = (document.getElementById('inToken')?.value||G.token).trim();
+  const p = (document.getElementById('inPageId')?.value||G.pageId).trim();
+  if (!t) { showConnResult('err','Paste your access token first'); return; }
+  if (!p) { showConnResult('err','Account ID needed — should be auto-filled above. Check step 2.'); return; }
+  const btn = document.getElementById('connectBtn');
+  if (btn) { btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Connecting…'; }
   G.token=t; G.pageId=p;
-  log('Connecting to Instagram Graph API via proxy...');
+  log('Connecting…');
   try {
-    const info = await igGet(`${p}?fields=name,username,followers_count,media_count`);
-    G.pageName = info.name || info.username || p;
-    G.pageUsername = info.username || '';
-    G.followers = info.followers_count || 0;
-    G.connected = true;
-    G_setupStep = 3;
+    if (!G.pageName) {
+      const info = await igGet(`${p}?fields=name,username,followers_count`);
+      G.pageName=info.name||info.username||p; G.pageUsername=info.username||''; G.followers=info.followers_count||0;
+    }
+    G.connected=true; G_setupStep=3;
     updateTopbar();
     showConnResult('ok',`Connected as ${G.pageName} · ${G.followers.toLocaleString()} followers`);
     log(`Connected as ${G.pageName}`,'ok');
-    setTimeout(()=>showTab('dms'), 900);
+    setTimeout(()=>showTab('dms'),900);
   } catch(e) {
     log('Connection failed: '+e.message,'err');
-    showConnResult('err', e.message + ' — check token and Account ID');
+    showConnResult('err', e.message);
     if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-plug"></i> Connect to Instagram';}
   }
 }
