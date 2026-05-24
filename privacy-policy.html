@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy – Rudrakshya Pasal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0e0c0a;
+      --surface: #161310;
+      --border: #2a2420;
+      --gold: #c8a96e;
+      --gold-light: #e2c98a;
+      --text: #e8e0d4;
+      --muted: #8a7f74;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    /* Background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200,169,110,0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+
+    .logo-mark {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1.2rem;
+    }
+
+    .logo-mark svg { width: 100%; height: 100%; }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .last-updated {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 3rem;
+    }
+
+    section {
+      margin-bottom: 2.8rem;
+      padding-bottom: 2.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child {
+      border-bottom: none;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.8rem 0;
+    }
+
+    ul li {
+      font-size: 0.95rem;
+      color: var(--text);
+      padding: 0.4rem 0 0.4rem 1.4rem;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      font-size: 0.4rem;
+      color: var(--gold);
+      top: 0.7rem;
+    }
+
+    a {
+      color: var(--gold-light);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,169,110,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--gold-light); }
+
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: 1.5rem 1.8rem;
+      border-radius: 0 4px 4px 0;
+      margin-top: 1rem;
+    }
+
+    .contact-box p { margin: 0.3rem 0; font-size: 0.9rem; }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="22" stroke="#c8a96e" stroke-width="1.5"/>
+      <circle cx="24" cy="24" r="6" fill="#c8a96e" opacity="0.9"/>
+      <circle cx="24" cy="10" r="3" fill="#c8a96e" opacity="0.5"/>
+      <circle cx="24" cy="38" r="3" fill="#c8a96e" opacity="0.5"/>
+      <circle cx="10" cy="24" r="3" fill="#c8a96e" opacity="0.5"/>
+      <circle cx="38" cy="24" r="3" fill="#c8a96e" opacity="0.5"/>
+    </svg>
+  </div>
+  <h1>Rudrakshya Pasal</h1>
+  <p>Privacy Policy</p>
+</header>
+
+<main>
+  <span class="last-updated">Last Updated: May 24, 2026</span>
+
+  <section>
+    <h2>Overview</h2>
+    <p>This Privacy Policy describes how Rudrakshya Pasal ("we", "us", or "our") collects, uses, and handles information when you use our Instagram Page Manager application ("the App"). The App is a business tool used solely to manage our own Instagram business account communications.</p>
+    <p>By using this App, you agree to the practices described in this policy.</p>
+  </section>
+
+  <section>
+    <h2>Information We Access</h2>
+    <p>The App accesses the following data through the Meta/Instagram Graph API:</p>
+    <ul>
+      <li>Instagram Business Account profile information (name, account ID)</li>
+      <li>Direct messages (DMs) sent to our Instagram business account</li>
+      <li>Comments on our Instagram business posts</li>
+      <li>Basic page engagement data</li>
+    </ul>
+    <p>This data is accessed solely for the purpose of managing our business communications on Instagram.</p>
+  </section>
+
+  <section>
+    <h2>How We Use the Information</h2>
+    <p>Information accessed through this App is used exclusively to:</p>
+    <ul>
+      <li>Read and respond to customer messages on our Instagram account</li>
+      <li>Manage and moderate comments on our posts</li>
+      <li>Provide customer support to our followers and customers</li>
+      <li>Operate and improve our internal business communication workflows</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Data Storage & Security</h2>
+    <p>The App operates as a client-side tool and does <strong style="color:var(--gold-light)">not store</strong> any Instagram messages, user data, or personal information on external servers or databases.</p>
+    <ul>
+      <li>No messages or user data are saved to any third-party server</li>
+      <li>Access tokens are stored locally in your browser session only</li>
+      <li>All API calls are made directly to Meta's official Graph API</li>
+      <li>Data is not retained after your session ends</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Data Sharing</h2>
+    <p>We do <strong style="color:var(--gold-light)">not</strong> sell, trade, rent, or share any data accessed through this App with third parties. The App is for internal business use only and all information remains strictly within our organization.</p>
+  </section>
+
+  <section>
+    <h2>Third-Party Services</h2>
+    <p>This App uses the Meta/Instagram Graph API. Your use of Instagram is governed by Meta's own Privacy Policy and Terms of Service, which can be found at <a href="https://www.facebook.com/privacy/policy/" target="_blank">facebook.com/privacy/policy</a>.</p>
+  </section>
+
+  <section>
+    <h2>Your Rights</h2>
+    <p>If you have communicated with our Instagram business account and wish to request deletion or access to your data, please contact us directly. We will respond to all reasonable requests within 30 days.</p>
+  </section>
+
+  <section>
+    <h2>Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Any changes will be reflected by updating the "Last Updated" date at the top of this page. Continued use of the App after changes constitutes acceptance of the updated policy.</p>
+  </section>
+
+  <section>
+    <h2>Contact Us</h2>
+    <p>If you have any questions about this Privacy Policy, please contact us:</p>
+    <div class="contact-box">
+      <p><strong style="color:var(--gold)">Rudrakshya Pasal | Authentic Rudraksha Beads</strong></p>
+      <p>Instagram: <a href="https://www.instagram.com" target="_blank">@rudrakshyapasal</a></p>
+      <p>Facebook Page: Rudrakshya Pasal</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 Rudrakshya Pasal · All Rights Reserved
+</footer>
+
+</body>
+</html>
